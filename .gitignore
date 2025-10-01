@@ -1,0 +1,14 @@
+.idea/
+node_modules/
+build/
+tmp/
+client-dist/
+dist/
+coverage/
+temp-generated/invoices/
+.nyc_output/
+/temp-generated/
+/tempchrome/
+.env.prod
+
+.qodo
