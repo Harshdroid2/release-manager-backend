@@ -1,12 +1,13 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Injectable } from "@nestjs/common";
 import { AppService } from "./app.service";
 
 @Controller()
+@Injectable()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get("/")
   ping(): string {
-    return "Ping success. Welcome to Release Manager microservice";
+    return this.appService.getHello();
   }
 }

@@ -15,6 +15,9 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
+    "typeorm:generate": "npm run typeorm:cli:develop migration:generate ./src/db/release_manager/migration/InitialMigration",
+    "typeorm:cli:develop": "cross-env NODE_ENV=debug ts-node ./node_modules/typeorm/cli -d ./src/db/release_manager/MainDbService.ts",
+    "typeorm:run:migrations:develop": "npm run typeorm:cli:develop -- migration:run",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
@@ -32,11 +35,14 @@
     "bcryptjs": "^3.0.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.2.2",
     "passport-jwt": "^4.0.1",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "sqlite3": "^5.1.7",
+    "typedi": "^0.10.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -54,6 +60,7 @@
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^16.0.0",
     "jest": "^30.0.0",
+    "madge": "^8.0.0",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
     "prettier": "^3.4.2",

@@ -2,7 +2,7 @@ import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "type
 
 export abstract class MyBaseEntity {
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
-  id!: number;
+  id?: number;
 
   @CreateDateColumn({
     type: "timestamptz",

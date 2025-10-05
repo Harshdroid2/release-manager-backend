@@ -5,11 +5,10 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Profile } from '../profiles/profiles.entity';
 import { UserRole } from '../../../../constants/userRoles';
 import { MyBaseEntity } from '../base/my-base.entity';
 
-@Entity({ name: 'users' })
+@Entity({ name: 'Users', schema: "tran" })
 @Unique(['email'])
 export class User extends MyBaseEntity{
 
@@ -41,8 +40,4 @@ export class User extends MyBaseEntity{
 
   @Column({ type: 'timestamptz', name: 'LastLogin', nullable: true })
   lastLogin?: Date;
-
-  @OneToOne(() => Profile, profile => profile.userId)
-  @JoinColumn({ name: 'id', referencedColumnName: 'userId' })
-  profile?: Profile;
 }

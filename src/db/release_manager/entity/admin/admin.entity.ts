@@ -1,29 +1,23 @@
 import {
   Entity,
   Column,
-  Unique,
-  OneToOne,
-  JoinColumn,
+  Unique
 } from 'typeorm';
-import { Profile } from '../profiles/profiles.entity';
 import { UserRole } from '../../../../constants/userRoles';
 import { MyBaseEntity } from '../base/my-base.entity';
 
-@Entity({ name: 'users' })
+@Entity({ name: 'CompanyAdmin', schema: "tran" })
 @Unique(['email'])
 export class Admin extends MyBaseEntity{
 
-  @Column({ type: 'text', name: 'Email' })
+  @Column({ type: 'varchar', name: 'Email' })
   email: string;
 
-  @Column({ type: 'text', name: 'Name', nullable: true })
-  name?: string;
+  @Column({ type: 'varchar', name: 'Name', nullable: true })
+  name: string | null;
 
-  @Column({ type: 'text', name: 'GithubUsername', nullable: true })
-  githubUsername?: string;
-
-  @Column({ type: 'text', name: 'GithubAccessToken', nullable: true })
-  githubAccessToken?: string;
+  @Column({ type: 'varchar', name: 'Username' })
+  username: string;
 
   @Column({ 
     type: 'enum', 
@@ -33,9 +27,44 @@ export class Admin extends MyBaseEntity{
   role: UserRole;
 
   @Column({ type: 'boolean', name: 'IsActive', default: true })
-  isActive?: boolean;
+  isActive: boolean;
 
-  @Column({ type: 'boolean', name: 'IsVerified', default: false })
-  isVerified?: boolean;
+  constructor(
+    email: string,
+    name: string,
+    username: string,
+    role: UserRole,
+    isActive: boolean
+  ){
+    super();
+    this.email = email;
+    this.name = name;
+    this.username = username;
+    this.role = role;
+    this.isActive = isActive
+  }
+}
 
+export class AdminDto extends Admin{
+  constructor({
+    email,
+    name,
+    username,
+    role,
+    isActive
+  }:{
+    email: string,
+    name: string,
+    username: string,
+    role: UserRole,
+    isActive: boolean
+  }) {
+    super(
+      email,
+      name,
+      username,
+      role,
+      isActive
+    );
+  }
 }

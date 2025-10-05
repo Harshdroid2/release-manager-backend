@@ -1,24 +1,33 @@
-import { Global, Module } from '@nestjs/common';
+import { Global, Module, OnApplicationShutdown } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GitAuthController } from './modules/auth/controllers/github-auth.controller';
+import { GithubAuthController } from './modules/auth/controllers/github-auth.controller';
 import { ProjectController } from './modules/projects/controllers/project.controller';
 import { ProjectService } from './modules/projects/services/project.service';
-import { AuthModule } from './modules/auth/auth.module';
-import { User } from './db/release_manager/entity/users/user.entity';
-import { Profile } from './db/release_manager/entity/profiles/profiles.entity';
-import { Admin } from './db/release_manager/entity/admin/admin.entity';
-import { MainDbService } from './db/release_manager/mainDbService';
-import { UserRepository } from './modules/users/repositories/user.repository';
-import { AdminRepository } from './modules/signup/repositories/admin.repositories';
+import { MainDbService } from './db/release_manager/MainDbService';
+import { GithubAuthService } from './modules/auth/services/github-auth.service';
+import { TokenService } from './modules/auth/services/token.service';
+import { UserRepository } from './db/release_manager/entity/users/user.repository';
+import { AdminRepository } from './db/release_manager/entity/admin/admin.repository';
+import { SignupService } from './modules/signup/services/signup.service';
 
-@Global()
 @Module({
   imports: [
   ],
-  controllers: [AppController, ProjectController, GitAuthController],
-  providers: [AppService, ProjectService, MainDbService, UserRepository, AdminRepository],
-  exports: [MainDbService, UserRepository, AdminRepository],
+  controllers: [AppController, ProjectController, GithubAuthController],
+  providers: [AppService, ProjectService, GithubAuthService,  MainDbService,TokenService, UserRepository, AdminRepository, SignupService]
 })
-export class AppModule {}
+export class AppModule implements OnApplicationShutdown{
+  constructor(    
+    private mainDbService: MainDbService,
+  ){
+    console.log(mainDbService)
+  }
+
+  async onApplicationShutdown(signal?: string): Promise<any> {
+    console.log(`Received OnApplicationShutdown: ${signal}`);
+    console.log('⌛ Closing Db connections...');
+    await this.mainDbService.close();
+  }
+}

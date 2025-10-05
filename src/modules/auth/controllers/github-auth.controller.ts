@@ -1,24 +1,38 @@
 // github-auth.controller.ts
-import { Controller, Get, Query, Res } from "@nestjs/common";
+import { Controller, Get, Injectable, Post, Query, Res } from "@nestjs/common";
 import { Response } from "express";
-import { Public } from "../decorators/public.decorator";
+import { getGithubLoginRdirectUrl, getRequiredEnvValue } from "src/utils";
+import { GithubAuthService } from "../services/github-auth.service";
 
 @Controller("auth/github")
-export class GitAuthController {
-  private clientId = process.env.GITHUB_CLIENT_ID;
+@Injectable()
+export class GithubAuthController {
 
-  // Step 1: Redirect user to GitHub OAuth
-  @Public()
-  @Get("login")
-  async githubLogin(@Res() res: Response) {
-    const redirectUrl = `https://github.com/login/oauth/authorize?client_id=${this.clientId}&redirect_uri=http://localhost:4000/api/auth/github/callback&scope=repo user:email`;
+constructor(
+  private readonly githubAuthService: GithubAuthService
+){}
+  @Get("/signup")
+  async githubSignup(@Res() res: Response) {
+    const redirectUrl = `${getRequiredEnvValue("GITHUB_AUTHORIZE_URL")}?client_id=${getRequiredEnvValue("GITHUB_CLIENT_ID")}&redirect_uri=${getGithubLoginRdirectUrl()}-signup&scope=repo,user:email,read:org`;
     res.redirect(redirectUrl);
   }
 
-  @Public()
-  @Get("callback")
-  async githubCallback(@Query("code") code: string, @Res() res: Response) {
-    // Redirect to frontend with the code for processing
+  @Post("/login")
+  async githubLogin(@Res() res: Response) {
+    const redirectUrl = `${getRequiredEnvValue("GITHUB_AUTHORIZE_URL")}?client_id=${getRequiredEnvValue("GITHUB_CLIENT_ID")}&redirect_uri=${getGithubLoginRdirectUrl()}-login&scope=repo,user:email,read:org`;
+    res.redirect(redirectUrl);
+  }
+
+  @Get("/callback-signup")
+  async githubSignUpCallback(@Query("code") code: string, @Res() res: Response) {
+    await this.githubAuthService.signup(code, res);
+    res.redirect(
+      `http://localhost:3000/auth/github/callback?code=${code}`
+    );
+  }
+
+  @Post("/callback-login")
+  async githubLoginCallback(@Query("code") code: string, @Res() res: Response) {
     res.redirect(
       `http://localhost:3000/auth/github/callback?code=${code}`
     );
