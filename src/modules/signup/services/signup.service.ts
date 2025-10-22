@@ -6,7 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import { Octokit } from '@octokit/rest';
 import axios from 'axios';
 
-import { User } from '../../../db/release_manager/entity/users/user.entity';
+import { MyUser } from '../../../db/release_manager/entity/users/my-user.entity';
 import { SignupDto } from '../dto/signup.dto';
 import { UserRole } from '../../../constants/userRoles';
 

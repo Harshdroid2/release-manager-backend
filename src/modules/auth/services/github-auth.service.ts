@@ -5,8 +5,8 @@ import * as bcrypt from 'bcryptjs';
 import { Octokit } from '@octokit/rest';
 import axios from 'axios';
 
-import { User } from '../../../db/release_manager/entity/users/user.entity';
-import { UserRepository } from '../../../db/release_manager/entity/users/user.repository';
+import { MyUser } from '../../../db/release_manager/entity/users/my-user.entity';
+import { MyUserRepository } from '../../../db/release_manager/entity/users/my-user.repository';
 import { AdminRepository } from '../../../db/release_manager/entity/admin/admin.repository';
 import { RegisterDto, LoginDto, AuthResponseDto, GitHubLoginDto } from '../dto/auth.dto';
 import { UserRole } from '../../../constants/userRoles';
@@ -21,7 +21,7 @@ import { getGithubLoginRdirectUrl } from 'src/utils';
 export class GithubAuthService {
 
   constructor(
-    private userRepository: UserRepository,
+    private userRepository: MyUserRepository,
     private adminRepository: AdminRepository,
     private tokenService: TokenService
   ) {}

@@ -10,7 +10,7 @@ import { MyBaseEntity } from '../base/my-base.entity';
 
 @Entity({ name: 'Users', schema: "tran" })
 @Unique(['email'])
-export class User extends MyBaseEntity{
+export class MyUser extends MyBaseEntity{
 
   @Column({ type: 'text', name: 'Email' })
   email: string;

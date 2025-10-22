@@ -8,7 +8,7 @@ import { ProjectService } from './modules/projects/services/project.service';
 import { MainDbService } from './db/release_manager/MainDbService';
 import { GithubAuthService } from './modules/auth/services/github-auth.service';
 import { TokenService } from './modules/auth/services/token.service';
-import { UserRepository } from './db/release_manager/entity/users/user.repository';
+import { MyUserRepository } from './db/release_manager/entity/users/my-user.repository';
 import { AdminRepository } from './db/release_manager/entity/admin/admin.repository';
 import { SignupService } from './modules/signup/services/signup.service';
 
@@ -16,7 +16,7 @@ import { SignupService } from './modules/signup/services/signup.service';
   imports: [
   ],
   controllers: [AppController, ProjectController, GithubAuthController],
-  providers: [AppService, ProjectService, GithubAuthService,  MainDbService,TokenService, UserRepository, AdminRepository, SignupService]
+  providers: [AppService, ProjectService, GithubAuthService,  MainDbService,TokenService, MyUserRepository, AdminRepository, SignupService]
 })
 export class AppModule implements OnApplicationShutdown{
   constructor(    

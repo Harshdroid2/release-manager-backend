@@ -2,7 +2,7 @@ import { Algorithm } from "jsonwebtoken";
 import * as jwt from "jsonwebtoken";
 import { Response } from "express";
 import { Admin } from "../../../db/release_manager/entity/admin/admin.entity";
-import { User } from "../../../db/release_manager/entity/users/user.entity";
+import { MyUser } from "../../../db/release_manager/entity/users/my-user.entity";
 import { Injectable } from "@nestjs/common";
 import * as process from "process";
 import { getRequiredEnvValue, privateKey } from "src/utils";
@@ -15,7 +15,7 @@ export class TokenService {
   private issuer = "FieldAssist";
   private algorithm: Algorithm = "RS256";
 
-  public generateAccessToken(userObj: User | Admin, githubAccessToken: string): string {
+  public generateAccessToken(userObj: MyUser | Admin, githubAccessToken: string): string {
     return jwt.sign(Object.assign({}, {...userObj, githubAccessToken}),privateKey, {
       expiresIn: `${process.env.EXPIRY_SECONDS_ACCESS}s`,
       issuer: this.issuer,

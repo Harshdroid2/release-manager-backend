@@ -6,8 +6,7 @@ import { DataSource, EntityTarget, ObjectLiteral, Repository } from "typeorm";
 import { DbService } from "./DbService";
 import { Injectable } from "@nestjs/common";
 import { join } from "path";
-import { getRequiredEnvValue } from "src/utils";
-import { setupEnvFile } from "src/utils";
+import { getRequiredEnvValue, setupEnvFile } from "../../utils";
 
 setupEnvFile();
 

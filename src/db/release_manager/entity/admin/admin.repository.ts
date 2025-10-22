@@ -4,7 +4,6 @@ import {
 } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { MainDbService } from "../../MainDbService";
-import { User } from "src/db/release_manager/entity";
 import { Admin, AdminDto } from "./admin.entity";
 
 @Injectable()

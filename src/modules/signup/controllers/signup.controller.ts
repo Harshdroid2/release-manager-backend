@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, UseGuards, ValidationPipe, Injectable } from '@nestjs/common';
 import { SignupDto } from '../dto/signup.dto';
-import { User } from '../../../db/release_manager/entity/users/user.entity';
+import { MyUser } from '../../../db/release_manager/entity/users/my-user.entity';
 import { UserRole } from '../../../constants/userRoles';
 import { SignupService } from '../services/signup.service';
 

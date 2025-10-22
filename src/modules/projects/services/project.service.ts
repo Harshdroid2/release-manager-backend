@@ -6,13 +6,11 @@ export class ProjectService {
     private octokit: Octokit;
 
     constructor() {
-      this.octokit = new Octokit({
-        auth: process.env.GITHUB_TOKEN
-      });
     }
 
-    public async getAllProjects(): Promise<any> {
-      const response = await this.octokit.rest.repos.listForAuthenticatedUser();
+    public async getAllProjects(gitToken: string): Promise<any> {
+      const octokit = new Octokit({ auth: gitToken });
+      const response = await octokit.rest.repos.listForAuthenticatedUser();
       
       return response.data;
     }

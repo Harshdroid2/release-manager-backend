@@ -1,5 +1,5 @@
-import { User } from "./users/user.entity";
+import { MyUser } from "./users/my-user.entity";
 import { Admin } from "./admin/admin.entity";
 
-export {User}
+export {MyUser}
 export {Admin}
