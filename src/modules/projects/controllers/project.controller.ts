@@ -20,12 +20,11 @@ export class ProjectController {
       return await this.projectService.getAllProjects(user.githubAccessToken);
     }
 
-    // @Get("/branches")
-    // @Roles(UserRole.ADMIN, UserRole.DEV, UserRole.QA, UserRole.RELEASE_MANAGER)
-    // public async getReleaseBranches(
-    //   @Query("repo") repo: string,
-    //   @CurrentUser() user: User
-    // ): Promise<any> {
-    //   return await this.projectService.getReleaseBranches(repo);
-    // }
+    @Get("/branches")
+    public async getReleaseBranches(
+      @Query("repo") repo: string,
+      @User() user: MyUser
+    ): Promise<any> {
+      return await this.projectService.getReleaseBranches(repo, user.githubAccessToken);
+    }
 }

@@ -15,10 +15,13 @@ export class ProjectService {
       return response.data;
     }
 
-    public async getReleaseBranches(repo: string): Promise<any> {
-      const response = await this.octokit.rest.repos.listBranches({
+    public async getReleaseBranches(repo: string, gitToken: string): Promise<any> {
+      const octokit = new Octokit({ auth: gitToken });
+      const response = await octokit.rest.repos.listBranches({
         owner: 'FieldAssist',
         repo
       });
+      return response.data;
+
     }
 }
