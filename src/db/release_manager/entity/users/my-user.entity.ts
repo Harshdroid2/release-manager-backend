@@ -15,12 +15,6 @@ export class MyUser extends MyBaseEntity{
   @Column({ type: 'text', name: 'Email' })
   email: string;
 
-  @Column({ type: 'text', name: 'GithubUsername', nullable: true })
-  githubUsername?: string;
-
-  @Column({ type: 'text', name: 'GithubAccessToken', nullable: true })
-  githubAccessToken?: string;
-
   @Column({ 
     type: 'enum', 
     enum: UserRole, 
@@ -35,9 +29,14 @@ export class MyUser extends MyBaseEntity{
   @Column({ type: 'boolean', name: 'IsVerified', default: false })
   isVerified: boolean;
 
+  @Column({ type: 'boolean', name: 'SignupCode', default: false })
+  signupCode: boolean;
+
   @Column({ type: 'text', name: 'Password', nullable: true })
   password?: string;
 
   @Column({ type: 'timestamptz', name: 'LastLogin', nullable: true })
   lastLogin?: Date;
+
+  githubAccessToken?: string;
 }
