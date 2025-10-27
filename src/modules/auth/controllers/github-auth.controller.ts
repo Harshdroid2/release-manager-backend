@@ -13,28 +13,38 @@ constructor(
 ){}
   @Get("/signup")
   async githubSignup(@Res() res: Response) {
-    const redirectUrl = `${getRequiredEnvValue("GITHUB_AUTHORIZE_URL")}?client_id=${getRequiredEnvValue("GITHUB_CLIENT_ID")}&redirect_uri=${getGithubLoginRdirectUrl()}-signup&scope=repo,user:email,read:org`;
+    // Use state parameter to differentiate between signup and login
+    const redirectUrl = `${getRequiredEnvValue("GITHUB_AUTHORIZE_URL")}?client_id=${getRequiredEnvValue("GITHUB_CLIENT_ID")}&redirect_uri=${getGithubLoginRdirectUrl()}&scope=repo,user:email,read:org&state=signup`;
     res.redirect(redirectUrl);
   }
 
-  @Post("/login")
+  @Get("/login")
   async githubLogin(@Res() res: Response) {
-    const redirectUrl = `${getRequiredEnvValue("GITHUB_AUTHORIZE_URL")}?client_id=${getRequiredEnvValue("GITHUB_CLIENT_ID")}&redirect_uri=${getGithubLoginRdirectUrl()}-login&scope=repo,user:email,read:org`;
+    // Use state parameter to differentiate between signup and login
+    const redirectUrl = `${getRequiredEnvValue("GITHUB_AUTHORIZE_URL")}?client_id=${getRequiredEnvValue("GITHUB_CLIENT_ID")}&redirect_uri=${getGithubLoginRdirectUrl()}&scope=repo,user:email,read:org&state=login`;
     res.redirect(redirectUrl);
   }
 
-  @Get("/callback-signup")
-  async githubSignUpCallback(@Query("code") code: string, @Res() res: Response) {
-    await this.githubAuthService.signup(code, res);
-    res.redirect(
-      `http://localhost:3000/auth/github/callback?code=${code}`
-    );
-  }
-
-  @Post("/callback-login")
-  async githubLoginCallback(@Query("code") code: string, @Res() res: Response) {
-    res.redirect(
-      `http://localhost:3000/auth/github/callback?code=${code}`
-    );
+  @Get("/callback")
+  async githubCallback(@Query("code") code: string, @Query("state") state: string, @Res() res: Response) {
+    try {
+      // Check the state parameter to determine if it's signup or login
+      if (state === 'signup') {
+        await this.githubAuthService.signup(code, res);
+      } else if (state === 'login') {
+        await this.githubAuthService.login(code, res);
+      } else {
+        throw new Error('Invalid state parameter');
+      }
+      
+      // Redirect to frontend callback page which will handle the rest
+      res.redirect(
+        `http://localhost:8080/auth/github/callback?code=${code}`
+      );
+    } catch (error) {
+      console.error('GitHub callback error:', error);
+      // Redirect to auth page with error
+      res.redirect(`http://localhost:8080/auth?error=${encodeURIComponent(error.message)}`);
+    }
   }
 }

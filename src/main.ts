@@ -18,6 +18,14 @@ async function bootstrap() {
       ]
   });
 
+  // Enable CORS with credentials for cookie support
+  app.enableCors({
+    origin: ['http://localhost:8080', 'http://localhost:3000'], // Frontend origins
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
   // Enable validation pipes globally
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,

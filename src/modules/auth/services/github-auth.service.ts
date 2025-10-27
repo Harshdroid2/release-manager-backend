@@ -36,7 +36,7 @@ export class GithubAuthService {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET,
         code,
-        redirect_uri: `${getGithubLoginRdirectUrl()}-signup`
+        redirect_uri: getGithubLoginRdirectUrl()
       },
       {
         headers: { Accept: "application/json" }
@@ -75,6 +75,49 @@ export class GithubAuthService {
     }
     const admin = await this.adminRepository.create(adminDto);
     const accessToken = this.tokenService.generateAccessToken(admin, tokenResponse.data.access_token);
+    this.tokenService.setAccessTokenCookie(accessToken, res);
+  }
+
+  public async login(code: string, res: Response): Promise<void> {
+    // Get user information from GitHub
+    const tokenResponse = await axios.post(
+      "https://github.com/login/oauth/access_token",
+      {
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        code,
+        redirect_uri: getGithubLoginRdirectUrl()
+      },
+      {
+        headers: { Accept: "application/json" }
+      }
+    );
+
+    const octokit = new Octokit({ auth: tokenResponse.data.access_token });
+    const { data: gitUser } = await octokit.rest.users.getAuthenticated();
+
+    const { data: gitEmails } = await octokit.rest.users.listEmailsForAuthenticatedUser();
+
+    const primaryEmail = gitEmails.find(email => email.primary)?.email;
+
+    if(!primaryEmail){
+        throw new Error('Primary email not found');
+    }
+
+    // Check if user exists
+    const [existingUser, existingAdmin] = await Promise.all([
+        this.userRepository.getByEmail(primaryEmail),
+        this.adminRepository.getByEmail(primaryEmail)
+    ]);
+
+    const user = existingUser || existingAdmin;
+
+    if (!user) {
+      throw new UnauthorizedException('User not found. Please sign up first.');
+    }
+
+    // Generate access token and set cookie
+    const accessToken = this.tokenService.generateAccessToken(user, tokenResponse.data.access_token);
     this.tokenService.setAccessTokenCookie(accessToken, res);
   }
 }

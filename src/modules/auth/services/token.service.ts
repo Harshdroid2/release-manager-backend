@@ -36,10 +36,14 @@ export class TokenService {
   }
 
   public setAccessTokenCookie(token: string, res: Response): void {
-    res.cookie(this.ACCESS_TOKEN_KEY, token, {
-      httpOnly: true,
+    const cookieOptions = {
+      httpOnly: false, // Set to false so frontend can read it
+      secure: false, // Set to false for localhost
+      sameSite: 'lax' as const, // Allow cross-site cookies
       maxAge: Number(process.env.EXPIRY_SECONDS_ACCESS!) * 1000,
-    });
+      path: '/',
+    };
+    res.cookie(this.ACCESS_TOKEN_KEY, token, cookieOptions);
   }
 
   public setRefreshTokenCookie(token: string, res: Response): void {
