@@ -1,9 +1,7 @@
 import {
   Entity,
   Column,
-  Unique,
-  OneToOne,
-  JoinColumn,
+  Unique
 } from 'typeorm';
 import { MyBaseEntity } from '../base/my-base.entity';
 
@@ -11,22 +9,22 @@ import { MyBaseEntity } from '../base/my-base.entity';
 @Unique(['version'])
 export class Release extends MyBaseEntity{
 
-  @Column({ type: 'varchar', name: 'Version' })
+  @Column({ type: 'varchar', name: 'Version', nullable: false })
   version: string;
 
-  @Column({ type: 'varchar', name: 'Repo', default: true })
+  @Column({ type: 'varchar', name: 'Repo', nullable: false })
   repo: string;
 
-  @Column({ type: 'boolean', name: 'IsApproved', default: true })
+  @Column({ type: 'boolean', name: 'IsApproved', default: false })
   isApproved: boolean;
 
-  @Column({ type: 'boolean', name: 'IsRunning', default: true })
+  @Column({ type: 'boolean', name: 'IsRunning', default: false })
   isRunning: boolean;
 
-  @Column({ type: 'boolean', name: 'IsCompleted', default: true })
+  @Column({ type: 'boolean', name: 'IsCompleted', default: false })
   isCompleted: boolean;
   
-  @Column({ type: 'numeric', name: 'MergedByUserId', default: false })
+  @Column({ type: 'numeric', name: 'MergedByUserId', nullable: true})
   mergedByUserId: number;
 
 
