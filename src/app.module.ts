@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GithubAuthController } from './modules/auth/controllers/github-auth.controller';
+import { AuthController } from './modules/auth/controllers/auth.controller';
 import { ProjectController } from './modules/projects/controllers/project.controller';
 import { ProjectService } from './modules/projects/services/project.service';
 import { MainDbService } from './db/release_manager/MainDbService';
@@ -18,7 +19,7 @@ import { SignupService } from './modules/signup/services/signup.service';
 @Module({
   imports: [
   ],
-  controllers: [AppController, ProjectController, GithubAuthController, ReleaseController],
+  controllers: [AuthController, AppController, ProjectController, GithubAuthController, ReleaseController],
   providers: [AppService, ProjectService, GithubAuthService,  MainDbService,TokenService, ReleaseRepository, ReleaseService, MyUserRepository, AdminRepository, SignupService]
 })
 export class AppModule implements OnApplicationShutdown{
