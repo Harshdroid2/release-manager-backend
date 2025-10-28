@@ -27,4 +27,21 @@ export class ProjectController {
     ): Promise<any> {
       return await this.projectService.getReleaseBranches(repo, user.githubAccessToken);
     }
+
+    @Get("/tags")
+    public async getAllTags(
+      @Query("repo") repo: string,
+      @User() user: MyUser
+    ): Promise<any> {
+      return await this.projectService.getAllTags(repo, user.githubAccessToken);
+    }
+
+    @Get("/actions")
+    public async getAllActions(
+      @Query("repo") repo: string,
+      @User() user: MyUser
+    ): Promise<any> {
+      return await this.projectService.getActions(repo, user.githubAccessToken);
+    }
+
 }
